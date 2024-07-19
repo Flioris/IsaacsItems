@@ -1,0 +1,9 @@
+name: IsaacsItems
+version: '${project.version}'
+main: flioris.isaacsitems.IsaacsItems
+api-version: '1.16'
+author: Flioris
+commands:
+  isaacsitems:
+    aliases:
+      - ii

@@ -1,0 +1,70 @@
+#
+#   DISCLAIMER:
+#   I am not the developer of The Binding of Isaac and have nothing to do with it. I'm just a fan who brought a couple
+# of fun things into Minecraft.
+#   I also want to say that I did not ask permission from the creator of The Binding of Isaac about whether I could use
+# content from his game in this way, since I do not have such an opportunity (all his social networks are closed to me,
+# since I am in a Sanctioned Country. I would also like to say right away that I do not support my country's actions).
+#   If you are part of the development team for The Binding of Isaac and you do not approve of this use of your game
+# content, please contact me here: fliorisdev@gmail.com
+#
+
+# Specify the material for the items here. If you change it from the default (FLINT) to something else, don't forget to
+# change it in the resource pack.
+material: "FLINT"
+
+# Switching the drop of items from mobs. If you turn this off, the item can only be retrieved with the
+# /ii <name> <count> command and the "isaacsitems.admin" permission.
+isaacsitems-drops-from-mobs: true
+# Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
+chance: 1
+
+messages:
+  usage: "&7[&e&lIsaacsItems&7] /ii <type> <count> ~<player>"
+  no-permission: "&7[&e&lIsaacsItems&7] You don't have enough rights (isaacsitems.admin)."
+
+items:
+  THE_HIEROPHANT:
+    display-name: "&eV - The Hierophant"
+    lore:
+      - "&fAdds 2 yellow hearts."
+      - "&fEffects are applied up to 20 yellow hearts."
+  THE_LOVERS:
+    display-name: "&eVI - The Lovers"
+    lore:
+      - "&fHeals 2 hearts."
+  THE_CHARIOT:
+    display-name: "&eVII - The Chariot"
+    lore:
+      - "&fFor 6 seconds you deal 8 contact damage."
+  THE_TOWER:
+    display-name: "&eXVI - The Tower"
+    lore:
+      - "&fSpawns around 6 activated TNT. The player"
+      - "&fbecomes invulnerable to explosions for a few seconds."
+  BAG_LUNCH:
+    display-name: "&eBag Lunch"
+    lore:
+      - "&fWhen you receive damage, you have a"
+      - "&fchance to receive a golden carrot."
+  THE_INTRUDER:
+    display-name: "&eThe Intruder"
+    lore:
+      - "&fWhen you receive damage, you have a"
+      - "&fchance to spawn a spider that will attack your enemy."
+  ROCK_BOTTOM:
+    display-name: "&eRock Bottom"
+    lore:
+      - "&fTakes all damage from effects."
+  SOCKS:
+    display-name: "&eSocks"
+    lore:
+      - "&fImmune to fall damage."
+  MONSTRANCE:
+    display-name: "&eMonstrance"
+    lore:
+      - "&fSometimes damages enemies if you hit them."
+  SPIRIT_SHACKLES:
+    display-name: "&eSpirit Shackles"
+    lore:
+      - "&fGives you a chance not to die in battle."
