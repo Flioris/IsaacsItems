@@ -10,7 +10,7 @@
 > fliorisdev@gmail.com
 
 ## Description
-Demo version of a plugin with a resource pack that adds items from the game The Binding of Isaac to Minecraft.
+Demo version of the plugin with its resource pack, which adds items from the game The Binding of Isaac to Minecraft.
 Currently the plugin adds the following 10 items: The Hierophant, The Lovers, The Chariot, The Tower, Bag Lunch,
 The Intruder, Rock Bottom, Socks, Monstrance, Spirit Shackles.
 
