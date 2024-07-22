@@ -30,41 +30,15 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        ItemType itemType;
-
-        try {
-            itemType = ItemType.valueOf(strings[0]);
-        } catch (IllegalArgumentException e) {
-            commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
-            return false;
+        if (strings[0].equalsIgnoreCase("reload")) {
+            processReload(commandSender);
+            return true;
+        } else if (strings[0].equalsIgnoreCase("get")) {
+            processGet(commandSender, strings);
+            return true;
         }
 
-        int count;
-
-        if (strings.length > 1) {
-            try {
-                count = Integer.parseInt(strings[1]);
-            } catch (NumberFormatException e) {
-                count = 1;
-            }
-        } else {
-            count = 1;
-        }
-
-        Player player = null;
-
-        if (strings.length > 2) {
-            player = Bukkit.getServer().getPlayer(strings[2]);
-        } else if (commandSender instanceof Player) {
-            player = (Player) commandSender;
-        }
-
-        if (player == null) {
-            commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
-            return false;
-        }
-
-        InventoryHandler.addItem(player, ConfigHandler.getItem(itemType, count));
+        commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
 
         return true;
     }
@@ -74,19 +48,71 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         List<String> stringList = new ArrayList<>();
 
         if (strings.length == 1) {
+            stringList.add("reload");
+            stringList.add("get");
+            stringList.add("help");
+        } else if (strings.length == 2) {
             for (ItemType type : ItemType.values()) {
                 stringList.add(type.toString());
             }
-        } else if (strings.length == 2) {
+        } else if (strings.length == 3) {
             for (int i = 1; i < 10; i++) {
                 stringList.add(Integer.toString(i));
             }
-        } else if (strings.length == 3) {
+        } else if (strings.length == 4) {
             stringList.addAll(Bukkit.getServer().getOnlinePlayers().stream()
                     .map(HumanEntity::getName)
                     .collect(Collectors.toList()));
         }
 
         return stringList;
+    }
+
+    private static void processReload(CommandSender commandSender) {
+        ConfigHandler.reload();
+        commandSender.sendMessage(ConfigHandler.improve("messages.reloaded"));
+    }
+
+    private static void processGet(CommandSender commandSender, String[] strings) {
+        if (strings.length < 2) {
+            commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
+            return;
+        }
+
+        ItemType itemType;
+
+        try {
+            itemType = ItemType.valueOf(strings[1]);
+        } catch (IllegalArgumentException e) {
+            commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
+            return;
+        }
+
+        int count;
+
+        if (strings.length > 2) {
+            try {
+                count = Integer.parseInt(strings[2]);
+            } catch (NumberFormatException e) {
+                count = 1;
+            }
+        } else {
+            count = 1;
+        }
+
+        Player player = null;
+
+        if (strings.length > 3) {
+            player = Bukkit.getServer().getPlayer(strings[3]);
+        } else if (commandSender instanceof Player) {
+            player = (Player) commandSender;
+        }
+
+        if (player == null) {
+            commandSender.sendMessage(ConfigHandler.improve("messages.usage"));
+            return;
+        }
+
+        InventoryHandler.addItem(player, ConfigHandler.getItem(itemType, count));
     }
 }

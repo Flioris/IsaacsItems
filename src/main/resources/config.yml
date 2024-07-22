@@ -14,14 +14,18 @@
 material: "FLINT"
 
 # Switching the drop of items from mobs. If you turn this off, the item can only be retrieved with the
-# /ii <name> <count> command and the "isaacsitems.admin" permission.
+# /ii get <type> ~<count> ~<player> command and the "isaacsitems.admin" permission.
 isaacsitems-drops-from-mobs: true
 # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
 chance: 1
 
 messages:
-  usage: "&7[&e&lIsaacsItems&7] /ii <type> <count> ~<player>"
-  no-permission: "&7[&e&lIsaacsItems&7] You don't have enough rights (isaacsitems.admin)."
+  usage: | 
+    &7[&e&lIsaacsItems&7] &fHelp:
+    &f/ii get <type> ~<count> ~<player> - command to issue an item.
+    &f/ii reload - command to reload the config.
+  no-permission: "&7[&e&lIsaacsItems&7] &fYou don't have enough rights (isaacsitems.admin)."
+  reloaded: "&7[&e&lIsaacsItems&7] &fThe plugin has been reloaded."
 
 items:
   THE_HIEROPHANT:

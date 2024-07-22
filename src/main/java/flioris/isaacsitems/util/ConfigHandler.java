@@ -13,6 +13,10 @@ import java.util.List;
 public class ConfigHandler {
     private static final Plugin plugin = IsaacsItems.getPlugin();
 
+    public static void reload() {
+        plugin.reloadConfig();
+    }
+
     public static boolean getBoolean(String path) {
         return plugin.getConfig().getBoolean(path);
     }
