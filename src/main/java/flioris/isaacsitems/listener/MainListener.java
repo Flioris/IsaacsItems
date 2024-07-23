@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -53,6 +54,7 @@ public class MainListener implements Listener {
         }.runTaskTimer(IsaacsItems.getPlugin(), 20, 20);
     }
 
+    // Drop an item with a certain chance when killing a mob.
     @EventHandler
     private static void onEntityDeath(EntityDeathEvent event) {
         if (!ConfigHandler.getBoolean("isaacsitems-drops-from-mobs")) {
@@ -118,7 +120,8 @@ public class MainListener implements Listener {
         ItemStack bag_lunch = InventoryHandler.findItem(player.getInventory(), ItemType.BAG_LUNCH);
 
         if (PlayerData.getTowerPlayers().contains(player.getUniqueId()) &&
-                cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                (cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION ||
+                        cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             manager.callEvent(new SideEffectEvent(ItemType.THE_TOWER, player, event));
         } else if (socks != null && cause == EntityDamageEvent.DamageCause.FALL) {
             manager.callEvent(new ItemUseEvent(socks, ItemType.SOCKS, player, null, event));
@@ -147,8 +150,7 @@ public class MainListener implements Listener {
 
     // Checking for the ability to use Spirit Shackles and recording damage.
     @EventHandler(priority = EventPriority.LOWEST)
-    private static void onEntityDamageByEntity(EntityDamageByEntityEvent event)
-    {
+    private static void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.isCancelled() || !(event.getDamager() instanceof LivingEntity) || !(event.getEntity() instanceof LivingEntity)) {
             return;
         }
@@ -183,6 +185,10 @@ public class MainListener implements Listener {
     // Using cards.
     @EventHandler
     private static void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+
         Action action = event.getAction();
 
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
@@ -190,7 +196,12 @@ public class MainListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        ItemStack item = player.getItemInHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        if (item.getType() != ItemType.getMaterial()) {
+            return;
+        }
+
         ItemType itemType = ItemType.getFromCustomModelData(InventoryHandler.getModelData(item));
 
         if (itemType != null && itemType.getCustomModelData() <= 4) {
