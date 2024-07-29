@@ -50,7 +50,7 @@ public class ItemHandler {
         item.setAmount(item.getAmount() - 1);
         chariotPlayers.add(uuid);
         player.setGlowing(true);
-        new BukkitRunnable() {;
+        new BukkitRunnable() {
             @Override
             public void run() {
                 chariotPlayers.remove(uuid);
@@ -155,7 +155,7 @@ public class ItemHandler {
         }
 
         towerPlayers.add(uuid);
-        new BukkitRunnable() {;
+        new BukkitRunnable() {
             @Override
             public void run() {
                 towerPlayers.remove(uuid);

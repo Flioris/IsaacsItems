@@ -125,8 +125,8 @@ public class MainListener implements Listener {
             manager.callEvent(new SideEffectEvent(ItemType.THE_TOWER, player, event));
         } else if (socks != null && cause == EntityDamageEvent.DamageCause.FALL) {
             manager.callEvent(new ItemUseEvent(socks, ItemType.SOCKS, player, null, event));
-        } else if (rock_bottom != null && cause == EntityDamageEvent.DamageCause.MAGIC ||
-                cause == EntityDamageEvent.DamageCause.POISON || cause == EntityDamageEvent.DamageCause.WITHER) {
+        } else if (rock_bottom != null && (cause == EntityDamageEvent.DamageCause.MAGIC ||
+                cause == EntityDamageEvent.DamageCause.POISON || cause == EntityDamageEvent.DamageCause.WITHER)) {
             manager.callEvent(new ItemUseEvent(rock_bottom, ItemType.ROCK_BOTTOM, player, null, event));
         } else if (bag_lunch != null) {
             manager.callEvent(new ItemUseEvent(bag_lunch, ItemType.BAG_LUNCH, player, null, event));
