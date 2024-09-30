@@ -6,7 +6,7 @@
 
   <groupId>flioris</groupId>
   <artifactId>IsaacsItems</artifactId>
-  <version>0.3</version>
+  <version>0.5</version>
   <packaging>jar</packaging>
 
   <name>IsaacsItems</name>

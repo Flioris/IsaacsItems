@@ -7,7 +7,7 @@ import org.bukkit.Material;
 @Getter
 public enum ItemType {
     THE_HIEROPHANT(1), THE_LOVERS(2), THE_CHARIOT(3), THE_TOWER(4), BAG_LUNCH(5), THE_INTRUDER(6), ROCK_BOTTOM(7),
-    SOCKS(8), MONSTRANCE(9), SPIRIT_SHACKLES(10);
+    SOCKS(8), MONSTRANCE(9), SPIRIT_SHACKLES(10), YOUR_SOUL(11), IT_HURTS(12);
 
     private final int customModelData;
     @Getter

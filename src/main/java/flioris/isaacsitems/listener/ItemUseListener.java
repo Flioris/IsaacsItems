@@ -56,6 +56,9 @@ public class ItemUseListener implements Listener {
             case SPIRIT_SHACKLES:
                 ItemHandler.useSpiritShackles(player, (EntityDamageByEntityEvent) source);
                 break;
+            case IT_HURTS:
+                ItemHandler.useItHurts(player);
+                break;
         }
     }
 }

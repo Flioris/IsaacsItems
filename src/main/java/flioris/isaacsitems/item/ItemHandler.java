@@ -21,7 +21,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 public class ItemHandler {
     private static final Random random = IsaacsItems.getRandom();
@@ -97,7 +100,7 @@ public class ItemHandler {
         center.setY(center.getY() + 1);
         killedPlayers.put(uuid, spirit);
         player.setInvisible(true);
-        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/2);
+        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2);
         player.setFoodLevel(0);
 
         new BukkitRunnable() {
@@ -201,5 +204,30 @@ public class ItemHandler {
 
     public static void useRockBottom(EntityDamageEvent event) {
         event.setCancelled(true);
+    }
+
+    public static void useItHurts(Player player) {
+        Set<UUID> itHurtsPlayers = PlayerData.getItHurtsPlayers();
+        UUID uuid = player.getUniqueId();
+
+        itHurtsPlayers.add(uuid);
+
+        for (int i = 0; i < 10; i++) {
+            Vector direction = new Vector(
+                    (random.nextDouble() - 0.5) * 2,
+                    random.nextDouble(),
+                    (random.nextDouble() - 0.5) * 2);
+            direction.normalize();
+            Arrow arrow = player.getWorld().spawn(player.getLocation(), Arrow.class);
+            arrow.setShooter(player);
+            arrow.setVelocity(direction.multiply(2));
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                itHurtsPlayers.remove(uuid);
+            }
+        }.runTaskLater(plugin, 200);
     }
 }

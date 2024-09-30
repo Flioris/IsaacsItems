@@ -13,5 +13,7 @@ public class PlayerData {
     @Getter
     private static final Multiset<UUID> towerPlayers = HashMultiset.create();
     @Getter
+    private static final Set<UUID> itHurtsPlayers = new HashSet<>();
+    @Getter
     private static final Map<UUID, Spirit> killedPlayers = new HashMap<>();
 }

@@ -27,22 +27,30 @@ messages:
   no-permission: "&7[&e&lIsaacsItems&7] &fYou don't have enough rights (isaacsitems.admin)."
   reloaded: "&7[&e&lIsaacsItems&7] &fThe plugin has been reloaded."
 
+entities:
+  possessed:
+    title: "&cPossessed"
+    # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
+    chance: 10
+    # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer. Will replace zombies with possessed villagers.
+    zombie-spawn-chance: 1
+
 items:
   THE_HIEROPHANT:
-    display-name: "&eV - The Hierophant"
+    display-name: "&eThe Hierophant"
     lore:
       - "&fAdds 2 yellow hearts."
       - "&fEffects are applied up to 20 yellow hearts."
   THE_LOVERS:
-    display-name: "&eVI - The Lovers"
+    display-name: "&eThe Lovers"
     lore:
       - "&fHeals 2 hearts."
   THE_CHARIOT:
-    display-name: "&eVII - The Chariot"
+    display-name: "&eThe Chariot"
     lore:
       - "&fFor 6 seconds you deal 8 contact damage."
   THE_TOWER:
-    display-name: "&eXVI - The Tower"
+    display-name: "&eThe Tower"
     lore:
       - "&fSpawns around 6 activated TNT. The player"
       - "&fbecomes invulnerable to explosions for a few seconds."
@@ -72,3 +80,11 @@ items:
     display-name: "&eSpirit Shackles"
     lore:
       - "&fGives you a chance not to die in battle."
+  YOUR_SOUL:
+    display-name: "&eYour Soul"
+    lore:
+      - "&fYou can pay the possessed villager with this."
+  IT_HURTS:
+    display-name: "&eIt Hurts"
+    lore:
+      - "&fFires 10 arrows when damaged."
