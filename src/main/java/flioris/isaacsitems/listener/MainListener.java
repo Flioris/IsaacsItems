@@ -9,6 +9,7 @@ import flioris.isaacsitems.item.ItemType;
 import flioris.isaacsitems.spirit.Spirit;
 import flioris.isaacsitems.util.ConfigHandler;
 import flioris.isaacsitems.util.InventoryHandler;
+import flioris.isaacsitems.util.PossessedVillagerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
@@ -18,12 +19,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -46,7 +46,7 @@ public class MainListener implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(IsaacsItems.getPlugin(), 20, 20);
+        }.runTaskTimer(plugin, 20, 20);
     }
 
     // Drop an item with a certain chance when killing a mob.
@@ -61,7 +61,8 @@ public class MainListener implements Listener {
         }
 
         Location location = event.getEntity().getLocation();
-        ItemStack item = ConfigHandler.getItem(ItemType.values()[random.nextInt(ItemType.values().length)], 1);
+        List<ItemType> enabledItems = ConfigHandler.getEnabledItems();
+        ItemStack item = ConfigHandler.getItem(enabledItems.get(random.nextInt(enabledItems.size())), 1);
 
         location.getWorld().dropItem(location, item);
     }
@@ -118,7 +119,8 @@ public class MainListener implements Listener {
                 (cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION ||
                         cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             manager.callEvent(new SideEffectEvent(ItemType.THE_TOWER, player, event));
-        } else if (socks != null && cause == EntityDamageEvent.DamageCause.FALL) {
+        } else if (socks != null && (cause == EntityDamageEvent.DamageCause.FALL ||
+                cause == EntityDamageEvent.DamageCause.HOT_FLOOR || cause == EntityDamageEvent.DamageCause.CONTACT)) {
             manager.callEvent(new ItemUseEvent(socks, ItemType.SOCKS, player, null, event));
         } else if (rock_bottom != null && (cause == EntityDamageEvent.DamageCause.MAGIC ||
                 cause == EntityDamageEvent.DamageCause.POISON || cause == EntityDamageEvent.DamageCause.WITHER)) {
@@ -216,14 +218,9 @@ public class MainListener implements Listener {
         Entity entity = event.getEntity();
 
         if (entity instanceof Villager) {
-            if (random.nextInt(100) < ConfigHandler.getInt("entities.possessed.chance")) {
-                spawnPossessedVillager((Villager) entity);
-            }
-        } else if (entity instanceof Zombie) {
-            if (random.nextInt(100) < ConfigHandler.getInt("entities.possessed.zombie-spawn-chance")) {
-                Location location = event.getLocation();
-                event.setCancelled(true);
-                location.getWorld().spawn(location, Villager.class, MainListener::spawnPossessedVillager);
+            if (ConfigHandler.getBoolean("entities.possessed.enabled") &&
+                    random.nextInt(100) < ConfigHandler.getInt("entities.possessed.chance")) {
+                PossessedVillagerHandler.spawnPossessedVillager((Villager) entity);
             }
         }
     }
@@ -250,7 +247,7 @@ public class MainListener implements Listener {
             return;
         }
 
-        setPossessedsTrades(villager);
+        PossessedVillagerHandler.setPossessedTrades(villager);
     }
 
     // Changes the prices of the possessed villager when a new product appears.
@@ -269,22 +266,18 @@ public class MainListener implements Listener {
         event.getRecipe().setIngredients(items);
     }
 
-    // Changes the prices of the possessed villager.
-    private static void setPossessedsTrades(Villager villager) {
-        List<MerchantRecipe> recipes = villager.getRecipes();
-        List<ItemStack> items = new ArrayList<>();
-
-        items.add(ConfigHandler.getItem(ItemType.YOUR_SOUL, 1));
-        for (MerchantRecipe recipe : recipes) {
-            recipe.setIngredients(items);
+    // Sending resource pack to players.
+    @EventHandler
+    private static void onPlayerJoin(PlayerJoinEvent event) {
+        if (!ConfigHandler.getBoolean("resourcepack.enabled")) {
+            return;
         }
-    }
 
-    // Spawns a possessed villager.
-    private static void spawnPossessedVillager(Villager villager) {
-        villager.setMetadata("isPossessed", new FixedMetadataValue(plugin, true));
-        villager.setCustomName(ConfigHandler.improve("entities.possessed.title"));
-        villager.setRemoveWhenFarAway(true);
-        setPossessedsTrades(villager);
+        Player player = event.getPlayer();
+
+        String url = ConfigHandler.getString("resourcepack.url");
+        byte[] sha1 = ConfigHandler.getBytes("resourcepack.sha1-hash");
+
+        player.setResourcePack(url, sha1);
     }
 }

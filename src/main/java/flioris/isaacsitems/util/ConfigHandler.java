@@ -58,4 +58,29 @@ public class ConfigHandler {
 
         return list;
     }
+
+    public static List<ItemType> getEnabledItems() {
+        List<ItemType> list = new ArrayList<>();
+
+        for (String itemName : plugin.getConfig().getConfigurationSection("items").getKeys(false)) {
+            if (getBoolean("items." + itemName + ".enabled")) {
+                list.add(ItemType.valueOf(itemName));
+            }
+        }
+
+        return list;
+    }
+
+    public static byte[] getBytes(String path) {
+        String string = plugin.getConfig().getString(path);
+        int len = string.length();
+        byte[] data = new byte[len / 2];
+
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4)
+                    + Character.digit(string.charAt(i+1), 16));
+        }
+
+        return data;
+    }
 }

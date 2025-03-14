@@ -26,7 +26,8 @@ public class SideEffectEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    @NotNull
+    public HandlerList getHandlers() {
         return handlerList;
     }
 
