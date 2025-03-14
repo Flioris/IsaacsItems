@@ -173,8 +173,10 @@ public class ItemHandler {
     }
 
     public static void useSocks(Player player, EntityDamageEvent event) {
-        player.setVelocity(player.getVelocity().setY(Math.sqrt(0.08 * player.getFallDistance())));
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SLIME_JUMP, 1f, 1f);
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            player.setVelocity(player.getVelocity().setY(Math.sqrt(0.08 * player.getFallDistance())));
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SLIME_JUMP, 1f, 1f);
+        }
         event.setCancelled(true);
     }
 
@@ -221,6 +223,7 @@ public class ItemHandler {
             Arrow arrow = player.getWorld().spawn(player.getLocation(), Arrow.class);
             arrow.setShooter(player);
             arrow.setVelocity(direction.multiply(2));
+            arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         }
 
         new BukkitRunnable() {

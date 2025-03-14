@@ -1,12 +1,11 @@
 #
 #   DISCLAIMER:
-#   I am not the developer of The Binding of Isaac and have nothing to do with it. I'm just a fan who brought a couple
-# of fun things into Minecraft.
-#   I also want to say that I did not ask permission from the creator of The Binding of Isaac about whether I could use
-# content from his game in this way, since I do not have such an opportunity (all his social networks are closed to me,
-# since I am in a Sanctioned Country. I would also like to say right away that I do not support my country's actions).
-#   If you are part of the development team for The Binding of Isaac and you do not approve of this use of your game
-# content, please contact me here: fliorisdev@gmail.com
+# I am not the developer of The Binding of Isaac and have nothing to do with it. I'm just a fan who brought a couple
+# of fun things into Minecraft. I also want to say that I did not obtain permission from the creator of The Binding
+# of Isaac to use content from the game in this way, as I have no way to do so (all his social networks
+# are inaccessible to me due to sanctions affecting my country and bans from RKN). If you are part of the development
+# team of The Binding of Isaac and you do not approve of this use of your game content, please contact me here:
+# fliorisdev@gmail.com
 #
 
 # Specify the material for the items here. If you change it from the default (FLINT) to something else, don't forget to
@@ -19,72 +18,90 @@ isaacsitems-drops-from-mobs: true
 # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
 chance: 1
 
+# Plugin resource pack sent to players. We use https://mc-packs.net/ for sending. Huge thanks to them!
+resourcepack:
+  enabled: true
+  url: "https://download.mc-packs.net/pack/10ec5047d0c4ed7ac046615899a38ee695667a58.zip"
+  sha1-hash: "10ec5047d0c4ed7ac046615899a38ee695667a58"
+
 messages:
   usage: | 
     &7[&e&lIsaacsItems&7] &fHelp:
     &f/ii get <type> ~<count> ~<player> - command to issue an item.
+    &f/ii summon <type> - command to spawn an entity.
     &f/ii reload - command to reload the config.
   no-permission: "&7[&e&lIsaacsItems&7] &fYou don't have enough rights (isaacsitems.admin)."
   reloaded: "&7[&e&lIsaacsItems&7] &fThe plugin has been reloaded."
 
 entities:
   possessed:
+    enabled: true
     title: "&cPossessed"
-    # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
+    # Chance of a possessed villager spawning. Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer.
     chance: 10
-    # Enter the chance as a percentage. 100 is maximum, 0 is minimum. The value must be an integer. Will replace zombies with possessed villagers.
-    zombie-spawn-chance: 1
 
 items:
   THE_HIEROPHANT:
+    enabled: true
     display-name: "&eThe Hierophant"
     lore:
       - "&fAdds 2 yellow hearts."
       - "&fEffects are applied up to 20 yellow hearts."
   THE_LOVERS:
+    enabled: true
     display-name: "&eThe Lovers"
     lore:
       - "&fHeals 2 hearts."
   THE_CHARIOT:
+    enabled: true
     display-name: "&eThe Chariot"
     lore:
       - "&fFor 6 seconds you deal 8 contact damage."
   THE_TOWER:
+    enabled: true
     display-name: "&eThe Tower"
     lore:
-      - "&fSpawns around 6 activated TNT. The player"
+      - "&fSpawns around 6 primed TNT. The player"
       - "&fbecomes invulnerable to explosions for a few seconds."
   BAG_LUNCH:
+    enabled: true
     display-name: "&eBag Lunch"
     lore:
       - "&fWhen you receive damage, you have a"
       - "&fchance to receive a golden carrot."
   THE_INTRUDER:
+    enabled: true
     display-name: "&eThe Intruder"
     lore:
       - "&fWhen you receive damage, you have a"
       - "&fchance to spawn a spider that will attack your enemy."
   ROCK_BOTTOM:
+    enabled: true
     display-name: "&eRock Bottom"
     lore:
       - "&fTakes all damage from effects."
   SOCKS:
+    enabled: true
     display-name: "&eSocks"
     lore:
       - "&fImmune to fall damage."
   MONSTRANCE:
+    enabled: true
     display-name: "&eMonstrance"
     lore:
       - "&fSometimes damages enemies if you hit them."
   SPIRIT_SHACKLES:
+    enabled: true
     display-name: "&eSpirit Shackles"
     lore:
       - "&fGives you a chance not to die in battle."
   YOUR_SOUL:
+    enabled: true
     display-name: "&eYour Soul"
     lore:
       - "&fYou can pay the possessed villager with this."
   IT_HURTS:
+    enabled: true
     display-name: "&eIt Hurts"
     lore:
       - "&fFires 10 arrows when damaged."
