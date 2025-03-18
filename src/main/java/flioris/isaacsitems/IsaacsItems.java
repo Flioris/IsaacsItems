@@ -6,14 +6,19 @@ import flioris.isaacsitems.listener.MainListener;
 import flioris.isaacsitems.listener.SideEffectListener;
 import lombok.Getter;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
 public final class IsaacsItems extends JavaPlugin {
     @Getter
@@ -25,10 +30,39 @@ public final class IsaacsItems extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+
+        if (configFile.exists()) {
+            FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            String configVersion = config.getString("version");
+            String pluginVersion = getDescription().getVersion();
+
+            if (!Objects.equals(configVersion, pluginVersion)) {
+                getLogger().warning("The config is outdated. I renamed the old config to old-config.yml and created a new one.");
+
+                File oldConfig = new File(getDataFolder(), "old-config.yml");
+
+                if (oldConfig.exists()) {
+                    oldConfig.delete();
+                }
+
+                if (configFile.exists()) {
+                    configFile.renameTo(oldConfig);
+                }
+
+                saveDefaultConfig();
+                reloadConfig();
+            }
+        }
+
         registerEvents();
         registerCommands();
-        checkForUpdates();
+
+        checkForUpdates().thenAccept(isUpToDate -> {
+            if (!isUpToDate) {
+                getLogger().warning("Update available: https://www.spigotmc.org/resources/118175");
+            }
+        });
     }
 
     @Override
@@ -49,8 +83,8 @@ public final class IsaacsItems extends JavaPlugin {
         command.setTabCompleter(new MainCommand());
     }
 
-    public void checkForUpdates() {
-        getServer().getScheduler().runTaskAsynchronously(this, () -> {
+    public CompletableFuture<Boolean> checkForUpdates() {
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 HttpURLConnection connection = (HttpURLConnection)
                         new URL("https://api.spigotmc.org/legacy/update.php?resource=118175").openConnection();
@@ -58,19 +92,17 @@ public final class IsaacsItems extends JavaPlugin {
                 connection.setConnectTimeout(5000);
                 connection.setReadTimeout(5000);
 
-                Scanner scanner = new Scanner(connection.getInputStream());
-                if (scanner.hasNext()) {
-                    String latestVersion = scanner.next();
-                    String currentVersion = getDescription().getVersion();
-
-                    if (!latestVersion.equalsIgnoreCase(currentVersion)) {
-                        getLogger().warning("Update available: https://www.spigotmc.org/resources/118175");
+                try (Scanner scanner = new Scanner(connection.getInputStream())) {
+                    if (scanner.hasNext()) {
+                        String latestVersion = scanner.next();
+                        String currentVersion = getDescription().getVersion();
+                        return latestVersion.equalsIgnoreCase(currentVersion);
                     }
                 }
-                scanner.close();
             } catch (IOException e) {
                 getLogger().warning("Error checking for updates: " + e.getMessage());
             }
+            return false;
         });
     }
 }

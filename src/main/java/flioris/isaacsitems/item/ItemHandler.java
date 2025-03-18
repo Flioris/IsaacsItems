@@ -6,11 +6,14 @@ import flioris.isaacsitems.data.EntityData;
 import flioris.isaacsitems.data.PlayerData;
 import flioris.isaacsitems.spirit.Spirit;
 import flioris.isaacsitems.util.InventoryHandler;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -29,6 +32,8 @@ import java.util.UUID;
 public class ItemHandler {
     private static final Random random = IsaacsItems.getRandom();
     private static final IsaacsItems plugin = IsaacsItems.getPlugin();
+    @Getter
+    private static final UUID healthModifierID = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
 
     public static void useTheHierophant(Player player, ItemStack item) {
         PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.ABSORPTION);
@@ -232,5 +237,31 @@ public class ItemHandler {
                 itHurtsPlayers.remove(uuid);
             }
         }.runTaskLater(plugin, 200);
+    }
+
+    public static void useFood(Player player, ItemStack item) {
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+
+        if (attribute == null) {
+            return;
+        }
+
+        AttributeModifier existingModifier = attribute.getModifiers().stream()
+                .filter(modifier -> modifier.getUniqueId().equals(healthModifierID))
+                .findFirst()
+                .orElse(null);
+        double newHealthBonus = 2;
+
+        if (existingModifier != null) {
+            newHealthBonus += existingModifier.getAmount();
+            attribute.removeModifier(existingModifier);
+        }
+
+        AttributeModifier modifier = new AttributeModifier(healthModifierID, "Extra HP from IsaacsItems food", newHealthBonus, AttributeModifier.Operation.ADD_NUMBER);
+
+        item.setAmount(item.getAmount() - 1);
+        attribute.addModifier(modifier);
+
+        player.setHealth(Math.min(player.getHealth() + 2, attribute.getValue()));
     }
 }

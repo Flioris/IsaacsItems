@@ -5,6 +5,7 @@ import flioris.isaacsitems.data.EntityData;
 import flioris.isaacsitems.data.PlayerData;
 import flioris.isaacsitems.event.ItemUseEvent;
 import flioris.isaacsitems.event.SideEffectEvent;
+import flioris.isaacsitems.item.ItemHandler;
 import flioris.isaacsitems.item.ItemType;
 import flioris.isaacsitems.spirit.Spirit;
 import flioris.isaacsitems.util.ConfigHandler;
@@ -12,6 +13,8 @@ import flioris.isaacsitems.util.InventoryHandler;
 import flioris.isaacsitems.util.PossessedVillagerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -207,7 +210,17 @@ public class MainListener implements Listener {
 
         ItemType itemType = ItemType.getFromCustomModelData(InventoryHandler.getModelData(item));
 
-        if (itemType != null && itemType.getCustomModelData() <= ItemType.THE_TOWER.getCustomModelData()) {
+        if (itemType == null) {
+            return;
+        }
+
+        int cmd = itemType.getCustomModelData();
+
+        // cmd < 5 - cards
+        if (cmd < 5) {
+            manager.callEvent(new ItemUseEvent(item, itemType, player, null, event));
+        // 12 < cmd < 21 - food
+        } else if ( 12 < cmd && cmd < 21) {
             manager.callEvent(new ItemUseEvent(item, itemType, player, null, event));
         }
     }
@@ -279,5 +292,29 @@ public class MainListener implements Listener {
         byte[] sha1 = ConfigHandler.getBytes("resourcepack.sha1-hash");
 
         player.setResourcePack(url, sha1);
+
+        if (player.isOp()) {
+            plugin.checkForUpdates().thenAccept(isUpToDate -> {
+                if (!isUpToDate) {
+                    player.sendMessage(ConfigHandler.improve("messages.update-available"));
+                }
+            });
+        }
+    }
+
+    // Removes extra HP from IsaacsItems food on death.
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+
+        if (attribute == null) {
+            return;
+        }
+
+        attribute.getModifiers().stream()
+                .filter(modifier -> modifier.getUniqueId().equals(ItemHandler.getHealthModifierID()))
+                .findFirst()
+                .ifPresent(attribute::removeModifier);
     }
 }

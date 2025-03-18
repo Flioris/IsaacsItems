@@ -8,6 +8,8 @@
 # fliorisdev@gmail.com
 #
 
+version: ${project.version}
+
 # Specify the material for the items here. If you change it from the default (FLINT) to something else, don't forget to
 # change it in the resource pack.
 material: "FLINT"
@@ -21,8 +23,8 @@ chance: 1
 # Plugin resource pack sent to players. We use https://mc-packs.net/ for sending. Huge thanks to them!
 resourcepack:
   enabled: true
-  url: "https://download.mc-packs.net/pack/10ec5047d0c4ed7ac046615899a38ee695667a58.zip"
-  sha1-hash: "10ec5047d0c4ed7ac046615899a38ee695667a58"
+  url: "https://download.mc-packs.net/pack/b9fd7a66be45271088eec0d542b1c1d9f5f9d2fd.zip"
+  sha1-hash: "b9fd7a66be45271088eec0d542b1c1d9f5f9d2fd"
 
 messages:
   usage: | 
@@ -32,6 +34,7 @@ messages:
     &f/ii reload - command to reload the config.
   no-permission: "&7[&e&lIsaacsItems&7] &fYou don't have enough rights (isaacsitems.admin)."
   reloaded: "&7[&e&lIsaacsItems&7] &fThe plugin has been reloaded."
+  update-available: "&7[&e&lIsaacsItems&7] &fUpdate available: https://www.spigotmc.org/resources/118175"
 
 entities:
   possessed:
@@ -105,3 +108,51 @@ items:
     display-name: "&eIt Hurts"
     lore:
       - "&fFires 10 arrows when damaged."
+  A_SNACK:
+    enabled: true
+    display-name: "&eA Snack"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  BREAKFAST:
+    enabled: true
+    display-name: "&eBreakfast"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  DESSERT:
+    enabled: true
+    display-name: "&eDessert"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  DINNER:
+    enabled: true
+    display-name: "&eDinner"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  LUNCH:
+    enabled: true
+    display-name: "&eLunch"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  ROTTEN_MEAT:
+    enabled: true
+    display-name: "&eRotten Meat"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  MIDNIGHT_SNACK:
+    enabled: true
+    display-name: "&eMidnight Snack"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."
+  SUPPER:
+    enabled: true
+    display-name: "&eSupper"
+    lore:
+      - "&fGrants one full Red Heart container."
+      - "&7&oEat me."

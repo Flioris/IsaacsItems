@@ -59,6 +59,9 @@ public class ItemUseListener implements Listener {
             case IT_HURTS:
                 ItemHandler.useItHurts(player);
                 break;
+            default:
+                ItemHandler.useFood(player, item);
+                break;
         }
     }
 }
